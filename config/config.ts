@@ -7,8 +7,8 @@ export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
-  // hash: true,
-  // history: { type: 'hash' },
+  hash: true,
+  history: { type: 'hash' },
   publicPath: './',
   define: {
     'process.env.API_URL': 'http://localhost:3101',

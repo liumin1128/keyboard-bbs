@@ -3,6 +3,9 @@ import { useWatch } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import copy from 'copy-to-clipboard';
+import { useSnackbar } from 'notistack';
 
 // import dyb from '';
 
@@ -21,12 +24,16 @@ const labels = {
   yjh: '阳极黑(+200)',
 };
 
+const titles = ['上盖', '底壳', '配重', '铭牌'];
+
 interface IPrevivewProps {
   control: unknown;
 }
 
 const Previvew: React.FunctionComponent<IPrevivewProps> = (props) => {
   const { control } = props;
+  const { enqueueSnackbar } = useSnackbar();
+
   const values = useWatch({
     control,
     name: ['top', 'bottom', 'peizhong', 'mingpai'], // without supply name will watch the entire form, or ['values', 'lastName'] to watch both
@@ -51,10 +58,10 @@ const Previvew: React.FunctionComponent<IPrevivewProps> = (props) => {
       <Typography variant="body1">
         <b>已选择: &nbsp;&nbsp;</b>
         {values
-          .map((i) => {
+          .map((i, index) => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            return labels[i];
+            return `${titles[index]}:${labels[i]}`;
           })
           .join('、')}
       </Typography>
@@ -79,6 +86,33 @@ const Previvew: React.FunctionComponent<IPrevivewProps> = (props) => {
           return price;
         })()}
       </Typography>
+
+      <Stack width="200px">
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          fullWidth={false}
+          onClick={() => {
+            copy(
+              values
+                .map((i, index) => {
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  return `${titles[index]}:${labels[i]}`;
+                })
+                .join('、'),
+            );
+
+            enqueueSnackbar('复制成功', {
+              variant: 'success',
+              autoHideDuration: 3000,
+            });
+          }}
+        >
+          复制到剪切板
+        </Button>
+      </Stack>
     </Stack>
   );
 };

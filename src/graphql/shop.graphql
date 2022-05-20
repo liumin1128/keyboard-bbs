@@ -1,0 +1,141 @@
+fragment shopFields on Shop {
+  _id
+  name
+  home
+  ua
+  cookies
+  comment
+  sessions
+  currentSession
+  proxy {
+    type
+    host
+    port
+    user
+    password
+    soft
+    url
+  }
+}
+
+query FindShops {
+  shops: findShops {
+    ...shopFields
+  }
+}
+
+query FindShop($_id: ID!) {
+  shop: findShop(_id: $_id) {
+    ...shopFields
+  }
+}
+
+mutation CreateShop(
+  $name: String
+  $ua: String
+  $comment: String
+  $cookies: String
+) {
+  shop: createShop(
+    input: {
+      name: $name
+      ua: $ua
+      comment: $comment
+      cookies: $cookies
+    }
+  ) {
+    ...shopFields
+  }
+}
+
+mutation UpdateShop(
+  $_id: ID!
+  $name: String
+  $ua: String
+  $comment: String
+  $cookies: String
+) {
+  shop: updateShop(
+    _id: $_id
+    input: {
+      name: $name
+      ua: $ua
+      comment: $comment
+      cookies: $cookies
+    }
+  ) {
+    ...shopFields
+  }
+}
+
+mutation UpdateShopProxy(
+  $_id: ID!
+  $type: String
+  $host: String
+  $port: String
+  $user: String
+  $password: String
+  $soft: String
+  $url: String
+) {
+  shop: updateShop(
+    _id: $_id
+    input: {
+      proxy: {
+        type: $type
+        host: $host
+        port: $port
+        user: $user
+        password: $password
+        soft: $soft
+        url: $url
+      }
+    }
+  ) {
+    ...shopFields
+  }
+}
+
+mutation DeleteShop($_id: ID!) {
+  shop: deleteShop(_id: $_id) {
+    ...shopFields
+  }
+}
+
+subscription ShopCreated {
+  shop: shopCreated {
+    ...shopFields
+  }
+}
+
+subscription ShopUpdated {
+  shop: shopUpdated {
+    ...shopFields
+  }
+}
+
+subscription ShopDeleted {
+  shop: shopDeleted {
+    ...shopFields
+  }
+}
+
+mutation OpenAds {
+  result: openAds {
+    code
+    status
+    message
+  }
+}
+
+mutation OperateShop(
+  $_id: ID!
+  $action: String!
+) {
+  result: operateShop(_id: $_id, action : $action) {
+    code
+    status
+    message
+  }
+}
+
